@@ -1,0 +1,21 @@
+/* static/styles.css */
+
+body {
+    padding-top: 56px;
+}
+
+h2 {
+    margin-top: 20px;
+}
+
+.navbar-brand {
+    font-weight: bold;
+}
+
+.form-label {
+    font-weight: bold;
+}
+
+.text-center {
+    margin-top: 50px;
+}

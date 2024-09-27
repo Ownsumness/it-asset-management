@@ -1,0 +1,45 @@
+<!-- templates/edit_asset.html -->
+
+{% extends "base.html" %}
+
+{% block title %}Edit Asset{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <h2>Edit Asset</h2>
+        {% if error %}
+            <div class="alert alert-danger">{{ error }}</div>
+        {% endif %}
+        <form method="POST" action="">
+            <div class="form-group">
+                <label for="name">Asset Name</label>
+                <input type="text" name="name" class="form-control" value="{{ asset['name'] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="category">Category</label>
+                <input type="text" name="category" class="form-control" value="{{ asset['category'] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="purchase_date">Purchase Date</label>
+                <input type="date" name="purchase_date" class="form-control" value="{{ asset['purchase_date'] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="status">Status</label>
+                <select name="status" class="form-control" required>
+                    <option value="In Use" {% if asset['status'] == 'In Use' %}selected{% endif %}>In Use</option>
+                    <option value="In Stock" {% if asset['status'] == 'In Stock' %}selected{% endif %}>In Stock</option>
+                    <option value="Under Maintenance" {% if asset['status'] == 'Under Maintenance' %}selected{% endif %}>Under Maintenance</option>
+                    <option value="Lost" {% if asset['status'] == 'Lost' %}selected{% endif %}>Lost</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="location">Location</label>
+                <input type="text" name="location" class="form-control" value="{{ asset['location'] }}" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Update Asset</button>
+            <a href="{{ url_for('assets.dashboard') }}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -10,7 +10,8 @@ def get_db():
     If none exists, create a new connection.
     """
     if 'db' not in g:
-        g.db = sqlite3.connect('assets.db')
+        db_path = current_app.config.get('DATABASE_PATH', 'assets.db')
+        g.db = sqlite3.connect(db_path)
         g.db.row_factory = sqlite3.Row
     return g.db
 

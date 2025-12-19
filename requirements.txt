@@ -1,3 +1,14 @@
-Flask
-Werkzeug
-gunicorn
+# Core Framework
+Flask==3.0.3
+Werkzeug==3.0.4
+
+# WSGI Server
+gunicorn==23.0.0
+
+# Development/Testing
+pytest==8.3.4
+pytest-cov==4.1.0
+flake8==7.1.1
+
+# Security (for password hashing - bundled with Werkzeug but explicit)
+# Werkzeug provides generate_password_hash, check_password_hash

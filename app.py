@@ -54,6 +54,13 @@ def create_app(config_class=None):
         """Health check endpoint for monitoring and load balancers."""
         return {'status': 'healthy', 'app': 'it-asset-management'}, 200
     
+    # Initialize database if it doesn't exist
+    db_path = app.config.get('DATABASE_PATH', 'assets.db')
+    if db_path != ':memory:' and not os.path.exists(db_path):
+        with app.app_context():
+            init_db()
+            logger.info("Database initialized")
+    
     logger.info(f"Application created with config: {config_class.__class__.__name__}")
     
     return app

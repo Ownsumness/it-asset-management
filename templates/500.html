@@ -5,9 +5,26 @@
 {% block title %}Server Error{% endblock %}
 
 {% block content %}
-<div class="text-center">
-    <h1>500 - Server Error</h1>
-    <p>An unexpected error has occurred. Please try again later.</p>
-    <a href="{{ url_for('assets.dashboard') }}" class="btn btn-primary">Go to Dashboard</a>
+<div class="error-page">
+    <div class="error-icon float-animation">
+        <i class="bi bi-gear display-1 text-gradient" style="animation: spin 3s linear infinite;"></i>
+    </div>
+    <h1>500</h1>
+    <p>Something went wrong on our end. Our engineers have been notified.</p>
+    <a href="{{ url_for('assets.dashboard') }}" class="btn btn-primary">
+        <i class="bi bi-house me-1"></i>Back to Dashboard
+    </a>
 </div>
+
+<style>
+    @keyframes spin {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+    }
+</style>
 {% endblock %}

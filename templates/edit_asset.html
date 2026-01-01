@@ -6,40 +6,81 @@
 
 {% block content %}
 <div class="row justify-content-center">
-    <div class="col-md-6">
-        <h2>Edit Asset</h2>
-        {% if error %}
-            <div class="alert alert-danger">{{ error }}</div>
-        {% endif %}
-        <form method="POST" action="">
-            <div class="form-group">
-                <label for="name">Asset Name</label>
-                <input type="text" name="name" class="form-control" value="{{ asset['name'] }}" required>
+    <div class="col-lg-6 col-md-8">
+        <div class="auth-card">
+            <div class="text-center mb-4">
+                <i class="bi bi-pencil-square display-4 text-gradient"></i>
             </div>
-            <div class="form-group">
-                <label for="category">Category</label>
-                <input type="text" name="category" class="form-control" value="{{ asset['category'] }}" required>
+            <h2 class="text-center">Edit Asset</h2>
+            <p class="text-center text-muted mb-4">Update the details for asset #{{ asset['asset_id'] }}</p>
+
+            {% if error %}
+            <div class="alert alert-danger">
+                <i class="bi bi-exclamation-circle me-2"></i>{{ error }}
             </div>
-            <div class="form-group">
-                <label for="purchase_date">Purchase Date</label>
-                <input type="date" name="purchase_date" class="form-control" value="{{ asset['purchase_date'] }}" required>
-            </div>
-            <div class="form-group">
-                <label for="status">Status</label>
-                <select name="status" class="form-control" required>
-                    <option value="In Use" {% if asset['status'] == 'In Use' %}selected{% endif %}>In Use</option>
-                    <option value="In Stock" {% if asset['status'] == 'In Stock' %}selected{% endif %}>In Stock</option>
-                    <option value="Under Maintenance" {% if asset['status'] == 'Under Maintenance' %}selected{% endif %}>Under Maintenance</option>
-                    <option value="Lost" {% if asset['status'] == 'Lost' %}selected{% endif %}>Lost</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="location">Location</label>
-                <input type="text" name="location" class="form-control" value="{{ asset['location'] }}" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Update Asset</button>
-            <a href="{{ url_for('assets.dashboard') }}" class="btn btn-secondary">Cancel</a>
-        </form>
+            {% endif %}
+
+            <form method="POST" action="">
+                <div class="form-group">
+                    <label for="name">
+                        <i class="bi bi-tag me-1"></i>Asset Name
+                    </label>
+                    <input type="text" name="name" id="name" class="form-control" value="{{ asset['name'] }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="category">
+                        <i class="bi bi-folder me-1"></i>Category
+                    </label>
+                    <input type="text" name="category" id="category" class="form-control"
+                        value="{{ asset['category'] }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="purchase_date">
+                        <i class="bi bi-calendar me-1"></i>Purchase Date
+                    </label>
+                    <input type="date" name="purchase_date" id="purchase_date" class="form-control"
+                        value="{{ asset['purchase_date'] }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="status">
+                        <i class="bi bi-circle me-1"></i>Status
+                    </label>
+                    <select name="status" id="status" class="form-control" required>
+                        <option value="In Use" {% if asset['status']=='In Use' %}selected{% endif %}>🟢 In Use</option>
+                        <option value="In Stock" {% if asset['status']=='In Stock' %}selected{% endif %}>🔵 In Stock
+                        </option>
+                        <option value="Under Maintenance" {% if asset['status']=='Under Maintenance' %}selected{% endif
+                            %}>🟡 Under Maintenance</option>
+                        <option value="Lost" {% if asset['status']=='Lost' %}selected{% endif %}>🔴 Lost</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="location">
+                        <i class="bi bi-geo-alt me-1"></i>Location
+                    </label>
+                    <input type="text" name="location" id="location" class="form-control"
+                        value="{{ asset['location'] }}" required>
+                </div>
+                <div class="d-flex gap-2 mt-4">
+                    <button type="submit" class="btn btn-primary flex-grow-1">
+                        <i class="bi bi-check-lg me-1"></i>Update Asset
+                    </button>
+                    <a href="{{ url_for('assets.dashboard') }}" class="btn btn-secondary">
+                        <i class="bi bi-x-lg me-1"></i>Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
+
+<style>
+    .gap-2 {
+        gap: 0.75rem;
+    }
+
+    .flex-grow-1 {
+        flex-grow: 1;
+    }
+</style>
 {% endblock %}

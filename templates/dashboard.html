@@ -5,38 +5,128 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
-<h2>Asset Dashboard</h2>
-<table class="table table-striped table-hover">
-    <thead>
-        <tr>
-            <th>Asset ID</th>
-            <th>Name</th>
-            <th>Category</th>
-            <th>Purchase Date</th>
-            <th>Status</th>
-            <th>Location</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for asset in assets %}
-        <tr>
-            <td>{{ asset['asset_id'] }}</td>
-            <td>{{ asset['name'] }}</td>
-            <td>{{ asset['category'] }}</td>
-            <td>{{ asset['purchase_date'] }}</td>
-            <td>{{ asset['status'] }}</td>
-            <td>{{ asset['location'] }}</td>
-            <td>
-                <a href="{{ url_for('assets.edit_asset', asset_id=asset['asset_id']) }}" class="btn btn-warning btn-sm">Edit</a>
-                {% if session.get('role') == 'admin' %}
-                <form action="{{ url_for('assets.delete_asset', asset_id=asset['asset_id']) }}" method="post" style="display:inline;">
-                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this asset?');">Delete</button>
-                </form>
-                {% endif %}
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div class="dashboard-header">
+    <h2><i class="bi bi-speedometer2 me-2"></i>Asset Dashboard</h2>
+    <a href="{{ url_for('assets.add_asset') }}" class="btn btn-primary">
+        <i class="bi bi-plus-lg me-1"></i>Add New Asset
+    </a>
+</div>
+
+<!-- Stats Cards -->
+<div class="dashboard-stats">
+    <div class="stat-card">
+        <div class="stat-value">{{ assets|length }}</div>
+        <div class="stat-label"><i class="bi bi-box me-1"></i>Total Assets</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ assets|selectattr('status', 'equalto', 'In Use')|list|length }}</div>
+        <div class="stat-label"><i class="bi bi-check-circle me-1"></i>In Use</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ assets|selectattr('status', 'equalto', 'In Stock')|list|length }}</div>
+        <div class="stat-label"><i class="bi bi-archive me-1"></i>In Stock</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ assets|selectattr('status', 'equalto', 'Under Maintenance')|list|length }}</div>
+        <div class="stat-label"><i class="bi bi-tools me-1"></i>Maintenance</div>
+    </div>
+</div>
+
+<!-- Assets Table -->
+<div class="table-responsive">
+    <table class="table table-striped table-hover" id="assets-table">
+        <thead>
+            <tr>
+                <th><i class="bi bi-hash me-1"></i>ID</th>
+                <th><i class="bi bi-tag me-1"></i>Name</th>
+                <th><i class="bi bi-folder me-1"></i>Category</th>
+                <th><i class="bi bi-calendar me-1"></i>Purchase Date</th>
+                <th><i class="bi bi-circle me-1"></i>Status</th>
+                <th><i class="bi bi-geo-alt me-1"></i>Location</th>
+                <th><i class="bi bi-gear me-1"></i>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for asset in assets %}
+            <tr>
+                <td><strong>#{{ asset['asset_id'] }}</strong></td>
+                <td>{{ asset['name'] }}</td>
+                <td>
+                    <span class="category-badge">{{ asset['category'] }}</span>
+                </td>
+                <td>{{ asset['purchase_date'] }}</td>
+                <td>
+                    {% if asset['status'] == 'In Use' %}
+                    <span class="status-badge status-in-use">{{ asset['status'] }}</span>
+                    {% elif asset['status'] == 'In Stock' %}
+                    <span class="status-badge status-in-stock">{{ asset['status'] }}</span>
+                    {% elif asset['status'] == 'Under Maintenance' %}
+                    <span class="status-badge status-maintenance">{{ asset['status'] }}</span>
+                    {% elif asset['status'] == 'Lost' %}
+                    <span class="status-badge status-lost">{{ asset['status'] }}</span>
+                    {% else %}
+                    <span class="status-badge">{{ asset['status'] }}</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <i class="bi bi-geo-alt-fill me-1" style="color: var(--accent-primary);"></i>{{ asset['location'] }}
+                </td>
+                <td>
+                    <div class="action-buttons">
+                        <a href="{{ url_for('assets.edit_asset', asset_id=asset['asset_id']) }}"
+                            class="btn btn-warning btn-sm" title="Edit">
+                            <i class="bi bi-pencil"></i>
+                        </a>
+                        {% if session.get('role') == 'admin' %}
+                        <form action="{{ url_for('assets.delete_asset', asset_id=asset['asset_id']) }}" method="post"
+                            style="display:inline;">
+                            <button type="submit" class="btn btn-danger btn-sm"
+                                onclick="return confirm('Are you sure you want to delete this asset?');" title="Delete">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </form>
+                        {% endif %}
+                    </div>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="7" class="text-center py-5">
+                    <i class="bi bi-inbox display-4 text-muted d-block mb-3"></i>
+                    <p class="text-muted mb-3">No assets found</p>
+                    <a href="{{ url_for('assets.add_asset') }}" class="btn btn-primary">
+                        <i class="bi bi-plus-lg me-1"></i>Add Your First Asset
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<style>
+    .action-buttons {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .category-badge {
+        background: rgba(99, 102, 241, 0.15);
+        color: #a5b4fc;
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
+
+    .badge-role {
+        background: var(--accent-gradient) !important;
+        color: white;
+        font-size: 0.7rem;
+        padding: 0.2rem 0.5rem;
+        border-radius: 4px;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+    }
+</style>
 {% endblock %}

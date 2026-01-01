@@ -5,9 +5,14 @@
 {% block title %}Page Not Found{% endblock %}
 
 {% block content %}
-<div class="text-center">
-    <h1>404 - Page Not Found</h1>
-    <p>The page you're looking for doesn't exist.</p>
-    <a href="{{ url_for('assets.dashboard') }}" class="btn btn-primary">Go to Dashboard</a>
+<div class="error-page">
+    <div class="error-icon float-animation">
+        <i class="bi bi-exclamation-triangle display-1 text-gradient"></i>
+    </div>
+    <h1>404</h1>
+    <p>Oops! The page you're looking for has vanished into the digital void.</p>
+    <a href="{{ url_for('assets.dashboard') }}" class="btn btn-primary">
+        <i class="bi bi-house me-1"></i>Back to Dashboard
+    </a>
 </div>
 {% endblock %}
